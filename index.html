@@ -11,17 +11,199 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;600&display=swap"
         rel="stylesheet">
+    <style>
+        /* Flip Card Styles */
+        .team-member {
+            perspective: 1000px;
+            cursor: pointer;
+            background: none;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            transition: none;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 320px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .team-member.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(20, 28, 43, 0.7);
+            padding: 2rem;
+            box-sizing: border-box;
+            border: 1px solid rgba(159, 122, 234, 0.1);
+        }
+
+        .card-front {
+            z-index: 2;
+        }
+
+        .card-back {
+            background: #181818;
+            color: #fff;
+            transform: rotateY(180deg);
+            z-index: 1;
+        }
+
+        /* Hacker SVG animated background */
+        .hacker-svg-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.18;
+            filter: drop-shadow(0 0 32px #035779) blur(0.5px) contrast(1.2) brightness(1.1);
+            transform: perspective(1200px) rotateX(8deg) scale(1.04);
+            background: radial-gradient(ellipse at 60% 40%, #0f0f1a 60%, #000 100%);
+        }
+
+        /* Enhanced 3D SVG background styles */
+        .hacker-svg-bg {
+            filter: drop-shadow(0 0 32px #051885) blur(0.5px) contrast(1.2) brightness(1.1);
+            transform: perspective(1200px) rotateX(8deg) scale(1.04);
+            background: radial-gradient(ellipse at 60% 40%, #0f0f1a 60%, #000 100%);
+        }
+
+        .logo-circle-shape {
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 0 3px #05001680, 0 0 32px 8px #04396433;
+            background: #101820;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 110px;
+            height: 110px;
+        }
+
+        .logo-img-circle {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            background: #181818;
+            border: none;
+            box-shadow: none;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- SVG Hacker Background -->
+    <svg class="hacker-svg-bg" width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+        <defs>
+            <linearGradient id="hackerGreen" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00ff41" />
+                <stop offset="100%" stop-color="#7de2fc" />
+            </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+            <!-- 3D-like gradients and glow -->
+            <radialGradient id="hacker3DGreen" cx="50%" cy="50%" r="80%">
+                <stop offset="0%" stop-color="#00ff41" stop-opacity="1"/>
+                <stop offset="60%" stop-color="#00ff41" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#0a1c0a" stop-opacity="0.1"/>
+            </radialGradient>
+            <linearGradient id="hacker3DBlue" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#7de2fc" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#00ffea" stop-opacity="0.2"/>
+            </linearGradient>
+            <filter id="glow3D" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="16" result="blur1"/>
+                <feGaussianBlur stdDeviation="2" result="blur2"/>
+                <feMerge>
+                    <feMergeNode in="blur1"/>
+                    <feMergeNode in="blur2"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+            <filter id="extrude3D" x="-20%" y="-20%" width="140%" height="140%">
+                <feOffset result="offOut" in="SourceAlpha" dx="0" dy="8"/>
+                <feGaussianBlur result="blurOut" in="offOut" stdDeviation="8"/>
+                <feBlend in="SourceGraphic" in2="blurOut" mode="normal"/>
+            </filter>
+        </defs>
+        <!-- 3D grid lines -->
+        <g filter="url(#extrude3D)">
+            <rect x="0" y="0" width="1920" height="1080" fill="none" />
+            <g id="gridLines">
+                <line x1="0" y1="100" x2="1920" y2="100" stroke="url(#hacker3DGreen)" stroke-width="2.5" opacity="0.18"/>
+                <line x1="0" y1="300" x2="1920" y2="300" stroke="url(#hacker3DBlue)" stroke-width="2" opacity="0.13"/>
+                <line x1="0" y1="500" x2="1920" y2="500" stroke="url(#hacker3DGreen)" stroke-width="1.5" opacity="0.11"/>
+                <line x1="0" y1="700" x2="1920" y2="700" stroke="url(#hacker3DBlue)" stroke-width="2" opacity="0.13"/>
+                <line x1="0" y1="900" x2="1920" y2="900" stroke="url(#hacker3DGreen)" stroke-width="2.5" opacity="0.18"/>
+                <line x1="200" y1="0" x2="200" y2="1080" stroke="url(#hacker3DBlue)" stroke-width="2" opacity="0.13"/>
+                <line x1="600" y1="0" x2="600" y2="1080" stroke="url(#hacker3DGreen)" stroke-width="1.5" opacity="0.11"/>
+                <line x1="1000" y1="0" x2="1000" y2="1080" stroke="url(#hacker3DBlue)" stroke-width="2" opacity="0.13"/>
+                <line x1="1400" y1="0" x2="1400" y2="1080" stroke="url(#hacker3DGreen)" stroke-width="2.5" opacity="0.18"/>
+                <line x1="1800" y1="0" x2="1800" y2="1080" stroke="url(#hacker3DBlue)" stroke-width="2" opacity="0.13"/>
+            </g>
+        </g>
+        <!-- 3D glowing circles -->
+        <g>
+            <circle cx="300" cy="200" r="28" fill="url(#hacker3DGreen)" filter="url(#glow3D)" opacity="0.22"/>
+            <circle cx="1200" cy="800" r="20" fill="url(#hacker3DBlue)" filter="url(#glow3D)" opacity="0.18"/>
+            <circle cx="1700" cy="400" r="32" fill="url(#hacker3DGreen)" filter="url(#glow3D)" opacity="0.21"/>
+            <circle cx="900" cy="600" r="18" fill="url(#hacker3DBlue)" filter="url(#glow3D)" opacity="0.15"/>
+            <circle cx="600" cy="900" r="24" fill="url(#hacker3DGreen)" filter="url(#glow3D)" opacity="0.19"/>
+        </g>
+        <!-- Animated "hacker" code lines with 3D shadow -->
+        <g>
+            <text x="5%" y="10%" font-size="38" fill="#00ff41" opacity="0.17" font-family="monospace" filter="url(#extrude3D)">
+                <tspan>
+                    01100110 01101111 01110010 01100011 01100101
+                </tspan>
+                <animate attributeName="y" from="10%" to="90%" dur="7s" repeatCount="indefinite"/>
+            </text>
+            <text x="80%" y="80%" font-size="34" fill="#7de2fc" opacity="0.14" font-family="monospace" filter="url(#extrude3D)">
+                <tspan>
+                    0xDEADBEEF
+                </tspan>
+                <animate attributeName="y" from="80%" to="20%" dur="9s" repeatCount="indefinite"/>
+            </text>
+        </g>
+    </svg>
+
     <div class="background-overlay"></div>
 
     <header>
-        <div class="logo">
+        <div class="logo enhanced-logo">
             <a href="https://www.instagram.com/cypherxelites/n" target="_blank">
-                <img src="img/logo_CE.jpg" alt="CypherXelites Logo" style="height: 100px;">
+                <span class="logo-glow-circle logo-circle-shape">
+                    <img src="img/logo_CE.jpg" alt="CypherXelites Logo" class="logo-img logo-img-circle">
+                    <span class="logo-glow"></span>
+                </span>
             </a>
-            <h3>CypherX<span>elites</span></h3>
+            <h3>
+                <span class="logo-gradient">CypherX</span><span class="logo-glow-text">elites</span>
+            </h3>
         </div>
         <nav>
             <ul class="nav-links">
@@ -92,53 +274,124 @@
                 <h1 class="ornate-title">OG Veterans</h1>
                 <div class="team-grid">
                     <div class="team-member">
-                        <div class="member-image">
-                            <img src="img/gonX.png" alt="Govind Acharya">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="member-image">
+                                    <img src="img/gonX.png" alt="Govind Acharya">
+                                </div>
+                                <h3>Govind Acharya</h3>
+                                <p>Python Developer/Cyber security</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Govind Acharya</h4>
+                                <p>https://www.linkedin.com/in/govind-acharya-g11315/</p>
+                            </div>
                         </div>
-                        <h3>Govind Acharya</h3>
-                        <p>Cyber Security / machine learner</p>
                     </div>
                     <div class="team-member">
-                        <div class="member-image">
-                            <img src="img/Ashwni.png" alt="Ashwani Tanwar">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="member-image">
+                                    <img src="img/Ashwni.png" alt="Ashwani Tanwar">
+                                </div>
+                                <h3>Ashwani Tanwar</h3>
+                                <p>Web Designer</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Ashwani Tanwar</h4>
+                                <p>https://www.linkedin.com/in/ashwani-tanwar-223214296/</p>
+                            </div>
                         </div>
-                        <h3>Ashwani Tanwar</h3>
-                        <p>Web Designer</p>
                     </div>
                     <div class="team-member">
-                        <div class="member-image">
-                            <img src="img/shivnsu.png" alt="Ashwani Tanwar">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="member-image">
+                                    <img src="img/n.png" alt="Natwar Sarda">
+                                </div>
+                                <h3>Natwar Sarda</h3>
+                                <p>Cyber Security student</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Natwar Sarda</h4>
+                                <p>https://www.linkedin.com/in/natwar-sarda-26a4b6352/</p>
+                            </div>
                         </div>
-                        <h3>Sahil Inera</h3>
-                        <p>Data Analyst / A I</p>
                     </div>
                     <div class="team-member">
-                        <div class="member-image">
-                            <img src="img/Bhav.png" alt="Bhavesh Acharya">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="member-image">
+                                    <img src="img/Bhav.png" alt="Bhavesh Acharya">
+                                </div>
+                                <h3>Bhavesh Acharya</h3>
+                                <p>Penetration Testing Intern</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Bhavesh Acharya</h4>
+                                <p>https://www.linkedin.com/in/bhavesh-acharya-18ba3a28b/</p>
+                            </div>
                         </div>
-                        <h3>Bhavesh Acharya</h3>
-                        <p>Penetration Testing Intern</p>
                     </div>
                     <div class="team-member">
-                        <div class="member-image">
-                            <img src="img/shivnsu.png" alt="Shivay Kushwaha">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="member-image">
+                                    <img src="img/Bhav.png" alt="Bhavesh Acharya">
+                                </div>
+                                <h3>Bhanwara-Ram Jaat</h3>
+                                <p>cybersecurity Enthuasist</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Bhanwara-Ram Jaat</h4>
+                                <p>https://www.linkedin.com/in/bhanvara-ram-choudhary-862610299/</p>
+                            </div>
                         </div>
-                        <h3>Shivay Kushwaha</h3>
-                        <p>Cybersecurity Intern</p>
                     </div>
                     <div class="team-member">
-                        <div class="member-image">
-                            <img src="img/lcky.png" alt="Laxmikant Jangir">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="member-image">
+                                    <img src="img/shivnsu.png" alt="Shivay Kushwaha">
+                                </div>
+                                <h3>Shivay Kushwaha</h3>
+                                <p>Cybersecurity Intern</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Shivay Kushwaha</h4>
+                                <p>https://www.linkedin.com/in/shivanshu-kushwaha-9440302b3/</p>
+                            </div>
                         </div>
-                        <h3>Laxmikant Jangir</h3>
-                        <p>Soft-tech Intern</p>
                     </div>
                     <div class="team-member">
-                        <div class="member-image">
-                            <img src="img/n.png" alt="Nisha Sharma">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="member-image">
+                                    <img src="img/lcky.png" alt="Laxmikant Jangir">
+                                </div>
+                                <h3>Laxmikant Jangir</h3>
+                                <p>Soft-tech Intern</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Laxmikant Jangir</h4>
+                                <p>https://www.linkedin.com/in/laxmikant-jangir-84b273235/</p>
+                            </div>
                         </div>
-                        <h3>Nisha Sharma</h3>
-                        <p>Web Developer</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="member-image">
+                                    <img src="img/n.png" alt="Nisha Sharma">
+                                </div>
+                                <h3>Nisha Sharma</h3>
+                                <p>Web Developer</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Nisha Sharma</h4>
+                                <p>https://www.linkedin.com/in/nisha-sharma-067722259/</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
         </section>
@@ -167,6 +420,16 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Flip card on click
+        document.querySelectorAll('.team-member').forEach(member => {
+            member.addEventListener('click', function (e) {
+                // Prevent flip if clicking a link or button inside the card
+                if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+                this.classList.toggle('flipped');
+            });
+        });
+    </script>
 </body>
 
 </html>
