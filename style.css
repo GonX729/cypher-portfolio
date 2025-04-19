@@ -332,12 +332,6 @@
     border: 1px solid rgba(159, 122, 234, 0.1);
   }
   
-  .team-member:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-    border-color: rgba(159, 122, 234, 0.3);
-  }
-  
   .member-image {
     width: 150px;
     height: 150px;
